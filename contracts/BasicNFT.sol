@@ -1,34 +1,32 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
 pragma solidity ^0.8.9;
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
+contract BasicNFT is ERC721 {
+    string public constant TOKEN_URI =
+        "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json";
+    uint256 private s_tokenCounter;
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
-
-    event Withdrawal(uint amount, uint when);
-
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
-
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
+    constructor() ERC721("Dogie", "DOG") {
+        s_tokenCounter = 0;
     }
 
-    function withdraw() public {
-        // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    function mintNFT() public returns (uint256) {
+        _safeMint(msg.sender, s_tokenCounter);
+        // Every time a new NFT is minted, we increase the token counter
+        s_tokenCounter = s_tokenCounter + 1;
+        return s_tokenCounter;
+    }
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
+    function tokenURI(
+        uint256 /* tokenId */
+    ) public pure override returns (string memory) {
+        // require(_exists(tokenId))
+        return TOKEN_URI;
+    }
 
-        emit Withdrawal(address(this).balance, block.timestamp);
-
-        owner.transfer(address(this).balance);
+    function getTokenCounter() public view returns (uint256) {
+        return s_tokenCounter;
     }
 }
