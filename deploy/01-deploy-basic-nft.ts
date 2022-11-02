@@ -8,7 +8,6 @@ const deployBasicNFT: DeployFunction = async (hre: HardhatRuntimeEnvironment) =>
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const waitBlockConfirmations = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATIONS
-    console.log(await getNamedAccounts())
 
     log("----------------------------------------------------")
     const args: any[] = []
@@ -26,3 +25,4 @@ const deployBasicNFT: DeployFunction = async (hre: HardhatRuntimeEnvironment) =>
 }
 
 export default deployBasicNFT
+deployBasicNFT.tags = ["all", "basicnft", "main"]
