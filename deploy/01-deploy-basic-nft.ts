@@ -11,7 +11,7 @@ const deployBasicNFT: DeployFunction = async (hre: HardhatRuntimeEnvironment) =>
 
     log("----------------------------------------------------")
     const args: any[] = []
-    const basicNFT = await deploy("BasicNFT", {
+    const basicNft = await deploy("BasicNft", {
         from: deployer,
         args: args,
         log: true,
@@ -20,7 +20,7 @@ const deployBasicNFT: DeployFunction = async (hre: HardhatRuntimeEnvironment) =>
 
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying")
-        await verify(basicNFT.address, args)
+        await verify(basicNft.address, args)
     }
 }
 

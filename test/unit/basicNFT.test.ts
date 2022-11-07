@@ -1,6 +1,6 @@
 import { assert } from "chai"
 import { BigNumber } from "ethers"
-import { BasicNFT } from "../../typechain-types"
+import { BasicNft } from "../../typechain-types"
 import { network, deployments, ethers } from "hardhat"
 import { developmentChains } from "../../helper-hardhat-config"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
@@ -8,20 +8,20 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Basic NFT Unit Tests", () => {
-          let basicNFT: BasicNFT
+          let basicNft: BasicNft
           let deployer: SignerWithAddress
 
           beforeEach(async () => {
               const accounts = await ethers.getSigners()
               deployer = accounts[0]
               await deployments.fixture(["mocks", "basicnft"])
-              basicNFT = await ethers.getContract("BasicNFT")
+              basicNft = await ethers.getContract("BasicNft")
           })
           describe("Constructor", () => {
               it("Initialises the NFT correctly", async () => {
-                  const name: string = await basicNFT.name()
-                  const symbol: string = await basicNFT.symbol()
-                  const tokenCounter: BigNumber = await basicNFT.getTokenCounter()
+                  const name: string = await basicNft.name()
+                  const symbol: string = await basicNft.symbol()
+                  const tokenCounter: BigNumber = await basicNft.getTokenCounter()
                   assert.equal(name, "Dogie")
                   assert.equal(symbol, "DOG")
                   assert.equal(tokenCounter.toString(), "0")
@@ -30,15 +30,15 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 
           describe("Mint NFT", () => {
               beforeEach(async () => {
-                  const txResponse = await basicNFT.mintNFT()
+                  const txResponse = await basicNft.mintNFT()
                   await txResponse.wait(1)
               })
               it("Allows users to mint an NFT, and updates appropriately", async () => {
-                  const tokenURI = await basicNFT.tokenURI(0)
-                  const tokenCounter = await basicNFT.getTokenCounter()
+                  const tokenURI = await basicNft.tokenURI(0)
+                  const tokenCounter = await basicNft.getTokenCounter()
 
                   assert.equal(tokenCounter.toString(), "1")
-                  assert.equal(tokenURI, await basicNFT.TOKEN_URI())
+                  assert.equal(tokenURI, await basicNft.TOKEN_URI())
               })
           })
       })
